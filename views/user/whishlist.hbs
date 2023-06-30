@@ -1,0 +1,141 @@
+{{#if emptyError}}
+
+<style>
+    .gradient-custom {
+        /* fallback for old browsers */
+        background: rgba(21, 21, 21, 1);
+
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: -webkit-linear-gradient(to right, rgb(168, 156, 218), rgba(11, 11, 11));
+
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to right, rgba(168, 156, 218), rgb(168, 156, 218))
+    }
+
+    .btn-warning {
+  color: #212529;
+  background-color: #ffc107;
+  height: 40px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 193, 7, 0.75);    
+}
+</style>
+
+<body>
+    <div style="margin-top: 50px;" class="container-fluid ">
+        <div class="row" id="cart-content">
+            <div class="col-md-12">
+                <div class="card-body cart">
+                    <div class="col-sm-12 empty-cart-cls text-center">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg6EKfr8LHM2ZpSXOta5cA9kfsnAcYhP_rJemd-5sbpA&usqp=CAU&ec=48665699"
+                            width="130" height="130" class="img-fluid mb-4 mr-3">
+                        <h3><strong>Your Wishlist is Empty</strong></h3>
+                        <h4>Add something to make me happy (-_-)</h4>
+                        <a href="/all-product" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue
+                            Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{{else}}
+
+<section class="h-100 gradient-custom">
+    <div class="container py-5">
+
+        <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-8">
+                <div class="card mb-4" >
+                    <div class="card-header py-3">
+                        <h5 class="mb-0"><strong> Your Wishlist</strong></h5>
+                    </div>
+                   {{#each list.products}}
+                    <div class="card-body">
+                         
+                        
+
+                        <!-- Single item -->
+                        <div class="row">
+
+                            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                <!-- Image -->
+                                <div class="bg-image hover-overlay hover-zoom ripple rounded"
+                                    data-mdb-ripple-color="light">
+                                    
+                                    <div>
+                                        
+                                         <a href="/productdetails/{{this.item}}"></a>
+                                            <img src="{{this.itemphotos.[0].fileName}}" class="w-100" alt="" />
+                                         </a>
+                                    </div>
+                                   
+                                    <a href="#!">
+                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                                    </a>
+                                </div>
+                                <!-- Image -->
+                            </div>
+
+
+                            <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                <!-- Data -->
+                                <p><strong>{{this.itemName}}</strong></p>
+
+
+                              
+                                {{!-- <button type="button" class="btn btn-outline-danger"
+                                    onclick="removeProduct('{{../list._id}}', '{{this.item}}')">Remove</button> --}}
+                                <!-- Data -->
+                                <strong><span>₹</span>{{this.itemPrice}}</strong>
+                            </div>
+
+
+                            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                
+
+                                <p style="margin-top: 5rem;" class="text-start text-md-center ">
+                                    
+                                    <button type="button" class="btn btn-outline-danger"
+                                    onclick="removeProduct('{{../list._id}}', '{{this.item}}')">Remove</button>
+
+                                    <button style="height: 40px;border-radius: 40px;" onclick="addToCart('{{this.item}}')" class="btn-warning">Add to cart<i class="fa fa-shopping-cart"></i></button>
+    
+                                </p>
+                            </div>
+                             
+                           
+                        </div>
+                  
+                    </div>
+                  {{/each}}
+                {{/if}} 
+                  
+                </div>
+                
+            </div>
+        </div>
+             
+                 
+    </div>
+    </div>
+        
+</section>
+
+<script>
+
+    function removeProduct(wishId,prodId){
+  $.ajax({
+    url:'/remove-from-wishlist',
+    data:{
+      id:wishId,
+      product:prodId,
+    },
+    method:'post',
+    success:(response)=>{
+        alert("Product removed from Cart")
+        location.reload()
+    }
+  })
+}
+</script>

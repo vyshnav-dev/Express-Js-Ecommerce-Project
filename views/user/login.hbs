@@ -1,0 +1,158 @@
+{{!-- <div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">Login</h2>
+            <form action="/login" method="post">
+            {{#if loginErr}}
+                <p class="error">{{loginErr}}</p>
+            {{/if}}
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" class="form-control" name="Email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="Password" placeholder="Password">
+                </div>
+                <a href="/signup">Create new account ?</a>
+                <button type="submit" class="btn btn-primary float-right">Login</button>
+            </form>
+        </div>
+    </div>
+</div> --}}
+
+
+
+
+ {{!-- <div class="row">
+  <div class="col-md-6 m-auto">
+    <div class="container mt-5 pl-5">
+      <form action="/login" method="POST">
+          {{#if loginError}}
+          <p style="color: red;">{{loginError}}</p>
+        {{/if}}
+  <!-- Email input -->
+  <div class="form-outline mb-4">
+    <input type="email" id="email" class="form-control" name="Email">
+    <label class="form-label" for="email">Email address</label>
+  </div>
+
+  <!-- Password input -->
+  <div class="form-outline mb-4">
+    <input type="password" id="form2Example2" class="form-control" name="Password">
+    <label class="form-label" for="form2Example2">Password</label>
+  </div>
+
+  <!-- 2 column grid layout for inline styling -->
+  <div class="row mb-4">
+    <div class="col d-flex justify-content-center">
+      <!-- Checkbox -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+        <label class="form-check-label" for="form2Example31"> Remember me </label>
+      </div>
+    </div>
+
+    <div class="col">
+      <!-- Simple link -->
+      <a href="#!">Forgot password?</a>
+    </div>
+  </div>
+
+  <!-- Submit button -->
+  <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+  <!-- Register buttons -->
+  <div class="text-center">
+    <p>Not a member? <a href="/signup">Register</a></p>
+  </div>
+</form>
+    </div>
+  </div>
+</div> --}}
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+     
+      background-image:url(https://hips.hearstapps.com/hmg-prod/images/ghk-2023-testingindex-perscriptionglasses-187-web-1-1676560062.jpg?crop=0.669xw:1.00xh;0.107xw,0&resize=1200:*);
+       background-repeat: no-repeat; 
+         background-size: cover;
+    }
+
+    .card {
+      width: 40rem;
+      margin: 0 auto;
+    }
+
+    .row {
+        background-color:rgba(255, 255, 255, 0.5); 
+    }
+  </style>
+</head>
+<body>
+  <div style="background-color: rgba(255, 255, 255, 0.5); " class="card text-black">
+    <div class="card-body p-md-0">
+      <div class="container">
+        <div style="border-radius: 10px;" class="row justify-content-center">
+          <div class="col-md-10 col-lg-6 col-xl-5">
+            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Login</p>
+           
+            <form action="/login" method="post">
+              {{#if loginError}}
+                <p style="color: red;">{{loginError}}</p>
+              {{/if}}
+              {{#if blockError}}
+                <p style="color: red;">{{blockError}}</p>
+              {{/if}}
+
+              <div class="mb-3">
+                <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                <label class="form-label" for="email">Your Email</label>
+                <input style="border-radius: 20px;" type="email" id="email" class="form-control" name="Email" required>
+              </div>
+
+              <div class="mb-3">
+                <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                <label class="form-label" for="password">Password</label>
+                <input style="border-radius: 20px;" type="password" id="password" class="form-control" name="Password" required>
+                <p>Not a member? <a href="/signup">Register</a></p>
+              </div>
+
+              <div class="d-flex justify-content-center mb-3">
+                <button type="submit" class="btn btn-primary" style="width: 6rem;">Login</button>
+              </div>
+              
+              <div class="d-flex justify-content-center mb-4">
+                <a href="/forgot-password">Forgot password?</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+

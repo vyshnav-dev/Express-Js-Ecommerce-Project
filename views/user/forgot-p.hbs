@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+     
+      background-image:url(https://hips.hearstapps.com/hmg-prod/images/ghk-2023-testingindex-perscriptionglasses-187-web-1-1676560062.jpg?crop=0.669xw:1.00xh;0.107xw,0&resize=1200:*);
+       background-repeat: no-repeat; 
+         background-size: cover;
+    }
+
+    .card {
+      width: 40rem;
+      margin: 0 auto;
+    }
+
+    .row {
+        background-color:rgba(255, 255, 255, 0.5); 
+    }
+  </style>
+</head>
+<body>
+  <div style="background-color: rgba(255, 255, 255, 0.5); " class="card text-black">
+    <div class="card-body p-md-0">
+      <div class="container">
+        <div style="border-radius: 10px;" class="row justify-content-center">
+          <div class="col-md-10 col-lg-6 col-xl-5">
+            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Reset Password</p>
+           
+            <form action="/Enter-otp" method="post">
+              {{#if loginError}}
+                <p style="color: red;">{{loginError}}</p>
+              {{/if}}
+              {{#if blockError}}
+                <p style="color: red;">{{blockError}}</p>
+              {{/if}}
+
+              <div class="mb-3">
+                <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                <label class="form-label" for="email">Your Email</label>
+                <input style="border-radius: 20px;" type="email" id="email" class="form-control" name="Email" required>
+              </div>
+
+              <div class="mb-3">
+                <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                <label class="form-label" for="password">Password</label>
+                <input style="border-radius: 20px;" type="password" id="password" class="form-control" name="Password" required>
+                
+              </div>
+               <div class="mb-3">
+                <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                <label class="form-label" for="password">ConfirmPassword</label>
+                <input style="border-radius: 20px;" type="password" id="password" class="form-control" name="ConformPassword" required>
+                
+              </div>
+
+              <div class="d-flex justify-content-center mb-3">
+                <button type="submit" class="btn btn-primary" style="width: 6rem;">Reset</button>
+              </div>
+              
+              <div class="d-flex justify-content-center mb-4">
+                
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

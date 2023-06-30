@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include SweetAlert2 library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cropper@1.5.12/dist/cropper.min.js"></script>
+  <style>
+    .confirmation-dialog {
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .confirmation-dialog h3 {
+      margin-bottom: 10px;
+    }
+
+    .confirmation-dialog .confirmation-buttons {
+      margin-top: 20px;
+    }
+
+    .confirmation-dialog .confirmation-buttons button {
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <h2 class="text-center">Add Product</h2>
+          <form id="categoryForm" action="/admin/add-product" method="POST" enctype="multipart/form-data">
+            <label for="name">Name</label><br>
+            <small style="color: red;" id="nameError" class="error-text"></small> <!-- Error message element -->
+            <input id="name" type="text" name="Name" class="form-control" required>
+            <label for="category">Category</label>
+            <select name="Category" class="form-control" required>
+              <option>Select</option>
+              {{#each category}}
+              <option>{{this.Category}}</option>
+              {{/each}}
+            </select>
+            <br>
+            <label for="stock">Stock</label><br>
+            <small style="color: red;" id="stockError" class="error-text"></small> <!-- Error message element -->
+            <input id="stock" type="number" name="Stock" class="form-control">            
+            <label for="price">Price</label><br>
+             <small style="color: red;" id="priceError" class="error-text"></small> <!-- Error message element -->
+            <input id="price" type="number" name="Price" class="form-control" required>
+              
+            <label for="description">Description</label>
+            <textarea type="text" name="Description" class="form-control"></textarea>
+            <label>Image</label>
+            <div>
+              <input type="file" id="imageInput" name="Image" class="form-control-file" accept="Image/*" multiple required>
+              <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; height: auto; display: none;">
+              <input type="hidden" id="croppedImage" name="croppedImage">
+            </div>
+            <button type="submit" class="btn btn-success mt-4">Submit</button>
+            <div>
+              {{!-- <button type="button" class="btn btn-danger mt-2" onclick="deleteImage()">Delete Image</button> --}}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var submitButton = document.querySelector("#categoryForm button[type='submit']");
+    submitButton.addEventListener("click", function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Validate form inputs
+      var nameInput = document.getElementById("name");
+      var priceInput = document.getElementById("price");
+      var stockInput = document.getElementById("stock");
+
+      // Reset error messages
+      var nameError = document.getElementById("nameError");
+      var priceError = document.getElementById("priceError");
+      var stockError = document.getElementById("stockError");
+      nameError.textContent = "";
+      priceError.textContent = "";
+      stockError.textContent = "";
+
+      // Perform validation
+      var isValid = true;
+
+      // Name validation
+      if (nameInput.value.trim() === "") {
+        nameError.textContent = "Name is required";
+        isValid = false;
+      }
+
+      // Name length validation
+      if (nameInput.value.trim().length > 20) {
+        nameError.textContent = "Name exceeds the maximum length of 20 characters";
+        isValid = false;
+      }
+
+      // Price validation
+      if (priceInput.value.trim() === "") {
+        priceError.textContent = "Price is required";
+        isValid = false;
+      } else if (parseFloat(priceInput.value) < 0) {
+        priceError.textContent = "Price cannot be negative";
+        isValid = false;
+      }
+
+      // Stock validation
+      if (stockInput.value.trim() === "") {
+        stockError.textContent = "Stock is required";
+        isValid = false;
+      } else if (parseInt(stockInput.value) < 0) {
+        stockError.textContent = "Stock cannot be negative";
+        isValid = false;
+      }
+
+      // If form inputs are valid, show SweetAlert2 message and submit the form
+      if (isValid) {
+        // Show SweetAlert2 message
+        Swal.fire({
+          title: "Success",
+          text: "Product added successfully!",
+          icon: "success",
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          cancelButtonColor: "#dc3545", // Set cancel button color
+          confirmButtonText: "OK",
+          confirmButtonColor: "#28a745", // Set confirm button color
+        }).then(function(result) {
+          if (result.isConfirmed) {
+            // Submit the form
+            document.querySelector("#categoryForm").submit();
+          }
+        });
+      }
+    });
+  });
+</script>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const imageInput = document.getElementById('imageInput');
+      const imagePreview = document.getElementById('imagePreview');
+      const croppedImageInput = document.getElementById('croppedImage');
+      let cropper;
+
+      imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+
+          reader.onload = function() {
+            imagePreview.src = reader.result;
+
+            if (cropper) {
+              cropper.destroy();
+            }
+
+            cropper = new Cropper(imagePreview, {
+              aspectRatio: 1,
+              viewMode: 2,
+              autoCropArea: 1,
+              ready: function() {
+                const canvas = cropper.getCroppedCanvas({
+                  width: 200, // Set desired cropped image width
+                  height: 200, // Set desired cropped image height
+                });
+                const croppedImageDataURL = canvas.toDataURL('image/jpeg');
+
+                croppedImageInput.value = croppedImageDataURL;
+              },
+            });
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 

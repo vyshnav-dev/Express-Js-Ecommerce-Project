@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Summary</title>
+  <style>
+    /* CSS styles for the order summary page */
+    h1 {
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+    }
+    table {
+      width: 1000px;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+    }
+    .view-products-link {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .view-products-link:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<section>
+<body>
+  <h1>Order Summary</h1>
+
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Product</th>
+          <th>Date</th>
+          <th>Address</th>
+          <th>Pincode</th>
+          <th>Mobile</th>
+          <th>Amount</th>
+          <th>Payment</th>
+          <th></th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each orders}}
+        <tr>
+          <td scope="row" class="auto-number"></td>
+          <td>
+            {{#each products}}
+              {{this.itemName}}<br><br>
+            {{/each}}
+          </td>
+          <td>{{this.date}}</td>
+          <td>{{this.deliveryDetails.address}}</td>
+          <td>{{this.deliveryDetails.pincode}}</td>
+          <td>{{this.deliveryDetails.phone}}</td>
+          {{#if (eq totalAmount 0) }}
+          <td>Amount paid</td>
+          {{else}}
+          <td>{{this.totalAmount}}</td>
+          {{/if}}
+          <td>{{this.paymentMethod}}</td>
+          <td>
+            {{#if (eq status 'Cancelled')}}
+              <td style="color:red;"><b>{{this.status}}</b></td> 
+            {{else if (eq status 'Shipped')}}
+              <td style="color: #77830e;"><b>{{this.status}}</b></td>
+            {{else if (eq this.status 'placed')}}
+              <td style="color: #e97510;"><b>{{this.status}}</b></td>
+            {{else if (eq this.status 'pending')}}
+              <td style="color: #326bc7;"><b>{{this.status}}</b></td>
+            {{else if (eq this.status 'Delivered')}}
+              <td style="color: #0cd327;"><b>{{this.status}}</b></td>
+            {{else if (eq this.status 'Return')}}
+              <td style="color: #7733b3;"><b>{{this.status}}</b></td>
+            {{/if}}
+          </td>
+          <td><a href="/view-order-products/{{this._id}}" type="button" class="btn btn-outline-success mt-1">View Products</a></td>
+          <td>
+             <div>
+                <form action="download-invoice?id={{this._id}}" method="post">
+			
+		            <button class="btn btn-outline-success" type="submit">Download</button>
+	        </form>
+            </div>
+          </td>
+          <td>
+            {{#if (eq this.status "placed")}}
+              <a href="/cancel-order?id={{this._id}}&&st=Cancelled" type="button" class="btn btn-danger mt-1">Cancel</a>
+            {{/if}}
+            {{#if (eq this.status "Shipped")}}  
+              <a href="/cancel-order?id={{this._id}}&&st=Cancelled" type="button" class="btn btn-danger mt-1">Cancel</a>
+            {{/if}}
+
+            {{#if (eq this.status 'Delivered')}}
+         
+            <a href="/return-order?id={{this._id}}&st=Return" type="button" class="btn btn-primary mt-1"
+             >Return</a>
+         
+          {{/if}}
+           
+           
+          </td>
+          
+
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <div>
+      
+    </div>
+     
+
+  <script>
+    // Add auto-numbering to table rows
+    const autoNumberCells = document.querySelectorAll('.auto-number');
+    autoNumberCells.forEach((cell, index) => {
+      cell.textContent = index + 1;
+    });
+  </script>
+
+  
+</body>
+
+  </section>
+  <div style="display: flex; justify-content: center;">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="/order-summery?p=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="/order-summery?p=2">2</a></li>
+            <li class="page-item"><a class="page-link" href="/order-summery?p=3">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+</html>
+
+
+
+
+

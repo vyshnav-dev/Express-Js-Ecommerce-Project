@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Users</title>
+
+  <!-- Include SweetAlert2 library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Include jQuery and DataTables libraries -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+  <style>
+    /* CSS styles */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-bottom: 2rem;
+    }
+
+    .btn {
+      border-radius: 0;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .table-responsive {
+      border: none;
+    }
+
+    .table {
+      font-size: 14px;
+    }
+
+    .table thead th {
+      font-weight: bold;
+      vertical-align: middle;
+      color: #fff;
+      background-color: #343a40;
+      border-color: #343a40;
+    }
+
+    .table tbody td {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <div class="container">
+      <h2>All Users</h2>
+      <!-- search -->
+      <div class="d-flex justify-content-end" style="padding-left: 50px;">
+        <form class="form-inline" action="/admin/user-data" method="post">
+          <input style="width: 100%" class="form-control mr-sm-4 d-inline" type="search" name="search"
+            placeholder="Search by name, category" aria-label="Search">
+          <button class="btn btn-outline-success my-sm-3 d-inline" type="submit">Search</button>
+        </form>
+      </div>
+
+      <table class="table mt-4" id="userTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">➩</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th>Option</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+          <tr>
+            <th scope="row"></th>
+            <td>{{this.Name}}</td>
+            <td>{{this.Email}}</td>
+
+            <td>
+              {{#if this.isBlocked}}
+              <a href="/admin/unblock-user/{{this._id}}" class="btn btn-primary">Unblock</a>
+              {{else}}
+              <button class="btn btn-danger block-button" onclick="confirmBlock('{{this.Name}}', '{{this._id}}')">Block</button>
+              {{/if}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="/admin/user-data?p=1">1</a></li>
+          <li class="page-item"><a class="page-link" href="/admin/user-data?p=2">2</a></li>
+          <li class="page-item"><a class="page-link" href="/admin/user-data?p=3">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Add SweetAlert2 confirmation script -->
+  <script>
+    function confirmBlock(name, id) {
+      Swal.fire({
+        title: "Confirm Block",
+        text: "Are you sure you want to block the user " + name + "?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        cancelButtonColor: "#007bff",
+        confirmButtonText: "Block",
+        confirmButtonColor: "#dc3545",
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = "/admin/block-user/" + id;
+        }
+      });
+    }
+  </script>
+
+  <!-- Initialize DataTables -->
+  <script>
+    $(function () {
+      $('#userTable').DataTable({
+        "dom": '<"top"i>rt<"bottom"flp><"clear">',
+      });
+    });
+  </script>
+
+  <script>
+    const table = document.getElementById('userTable');
+    const rows = table.querySelectorAll('tbody tr');
+
+    // Set the row number for each row
+    rows.forEach((row, index) => {
+      const cell = row.querySelector('th');
+      cell.textContent = index + 1; // Set the row number
+    });
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,256 @@
+<style>
+  .confirmation-dialog {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .confirmation-dialog h3 {
+    margin-bottom: 10px;
+  }
+
+  .confirmation-dialog .confirmation-buttons {
+    margin-top: 20px;
+  }
+
+  .confirmation-dialog .confirmation-buttons button {
+    margin: 0 10px;
+  }
+
+  .error-message {
+    color: red;
+  }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include SweetAlert library -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body>
+  <section>
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <h2 class="text-center">Edit Product</h2>
+          <form id="categoryForm" action="/admin/edit-product/{{product._id}}" method="POST" enctype="multipart/form-data">
+
+            <label for="category">Name</label>
+            <input id="category" type="text" name="Name" class="form-control" value="{{product.Name}}">
+            <div id="nameError" class="error-message"></div>
+
+            <label for="category">Category</label>
+            <select name="Category" class="form-control" required>
+              <option value="{{product.Category}}">{{product.Category}}</option>
+              {{#each category}}
+              <option>{{this.Category}}</option>
+              {{/each}}
+            </select>
+            <div id="categoryError" class="error-message"></div>
+
+            <label for="price">Price</label>
+            <input id="price" type="text" name="Price" class="form-control" value="{{product.Price}}">
+            <div id="priceError" class="error-message"></div>
+
+            <label for="stock">Stock</label>
+            <input id="stock" type="text" name="Stock" class="form-control" value="{{product.Stock}}">
+            <div id="stockError" class="error-message"></div>
+
+            <label for="description">Description</label>
+            <input type="text" name="Description" class="form-control" value="{{product.Description}}">
+            <div id="descriptionError" class="error-message"></div>
+           
+            <label for="image">Image</label>
+            <div>
+              
+              <input type="file" id="imageInput" name="Image" class="form-control-file" accept="Image/*" multiple onchange="viewImage(event)">
+              
+               <img id="imagePreview" src="{{this.product.photos.[0].fileName}}" alt="Image Preview" style="max-width: 50%; height: auto;">
+              <input type="hidden" id="croppedImage" name="croppedImage"> 
+              
+            </div>
+          
+
+            <button type="submit" class="btn btn-success mt-4">Submit</button>
+
+            <div>
+              {{!-- <button type="button" class="btn btn-danger mt-2" onclick="deleteImage()">Delete Image</button> --}}
+            </div>
+
+            {{!-- <input type="hidden" name="CroppedImage" id="croppedImageInput"> --}}
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add the SweetAlert script after the HTML code -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+  var submitButton = document.querySelector("#categoryForm button[type='submit']");
+  submitButton.addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    if (validateForm()) {
+      // Show SweetAlert2 message
+      Swal.fire({
+        title: "Success",
+        text: "Form submitted successfully!",
+        icon: "success",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        cancelButtonClass: "btn-danger",
+        confirmButtonText: "OK",
+        confirmButtonClass: "btn-success",
+      }).then(function(result) {
+        if (result.value) {
+          // Submit the form
+          document.querySelector("#categoryForm").submit();
+        }
+      });
+    }
+  });
+});
+
+function validateForm() {
+  let isValid = true;
+
+  const nameInput = document.getElementById("category");
+  const categoryInput = document.querySelector('select[name="Category"]');
+  const priceInput = document.getElementById("price");
+  const stockInput=document.getElementById("stock")
+  const descriptionInput = document.querySelector('input[name="Description"]');
+
+  const nameError = document.getElementById("nameError");
+  const categoryError = document.getElementById("categoryError");
+  const priceError = document.getElementById("priceError");
+  const stockError=document.getElementById("stockError");
+  const descriptionError = document.getElementById("descriptionError");
+
+  // Reset error messages
+  nameError.textContent = "";
+  categoryError.textContent = "";
+  priceError.textContent = "";
+  descriptionError.textContent = "";
+
+  // Validate Name field
+  if (nameInput.value.trim() === "") {
+    nameError.textContent = "Name is required";
+    isValid = false;
+  }
+
+  // Validate Category field
+  if (categoryInput.value.trim() === "") {
+    categoryError.textContent = "Category is required";
+    isValid = false;
+  }
+
+  // Validate Price field
+  if (priceInput.value.trim() === "") {
+    priceError.textContent = "Price is required";
+    isValid = false;
+  } else if (!/^\d+(\.\d{1,2})?$/.test(priceInput.value.trim())) {
+    priceError.textContent = "Invalid price format";
+    isValid = false;
+  }
+   else if (parseFloat(priceInput.value) < 0) {
+        priceError.textContent = "Price cannot be negative";
+        isValid = false;
+      }
+
+    //validate stock
+    if (stockInput.value.trim() === "") {
+        stockError.textContent = "Stock is required";
+        isValid = false;
+      } else if (parseInt(stockInput.value) < 0) {
+        stockError.textContent = "Stock cannot be negative";
+        isValid = false;
+      }
+
+  // Validate Description field
+  if (descriptionInput.value.trim() === "") {
+    descriptionError.textContent = "Description is required";
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+  </script>
+
+  <script>
+     function viewImage(event) {
+      document.getElementById('imagePreview').src = URL.createObjectURL(event.target.files[0]);
+    } 
+
+    function deleteImage() {
+      const image = document.getElementById('imageInput');
+      image.src = '';
+      const fileInput = document.querySelector('input[name="Image"]');
+      fileInput.value = '';
+
+      // Destroy Cropper instance
+      if (cropper) {
+        cropper.destroy();
+        cropper = null;
+      }
+    }
+  </script>
+
+  <!-- Image crop -->
+  {{!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const imageInput = document.getElementById('imageInput');
+      const imagePreview = document.getElementById('imagePreview');
+      const croppedImageInput = document.getElementById('croppedImage');
+      let cropper;
+
+      imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+
+          reader.onload = function() {
+            imagePreview.src = reader.result;
+
+            if (cropper) {
+              cropper.destroy();
+            }
+
+            cropper = new Cropper(imagePreview, {
+              aspectRatio: 1,
+              viewMode: 2,
+              autoCropArea: 1,
+              ready: function() {
+                const canvas = cropper.getCroppedCanvas({
+                  width: 200, // Set desired cropped image width
+                  height: 200, // Set desired cropped image height
+                });
+                const croppedImageDataURL = canvas.toDataURL('image/jpeg');
+
+                croppedImageInput.value = croppedImageDataURL;
+              },
+            });
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
+    });
+  </script> --}}
+</body>
+</html>
+
+
+
+
+
+
+

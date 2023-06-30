@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding-bottom: 5rem;
+    }
+
+    .btn {
+      border-radius: 0;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .table-responsive {
+      border: none;
+      overflow-x: auto;
+    }
+
+    .table {
+      font-size: 14px;
+      margin: 0 auto; /* Center the table */
+    }
+
+    .table thead th {
+      font-weight: bold;
+      vertical-align: middle;
+      color: #fff;
+      background-color: #343a40;
+      border-color: #343a40;
+      position: relative;
+    }
+
+    .table thead th .sort-buttons {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .table thead th .sort-buttons button {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+     .description-ellipsis {
+      display: inline-block;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .form-inline {
+        display: block;
+      }
+
+      .form-inline .form-control {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .table-responsive {
+        overflow-x: scroll;
+      }
+
+      .table td,
+      .table th {
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <div class="container">
+      <div class="row mt-4">
+        <a href="/admin/add-product" class="btn btn-success ml-auto">Add Product</a>
+      </div>
+      <h1>Products</h1>
+
+      <div s class="d-flex justify-content-end " style="padding-left: 50px;">
+        <form class="form-inline" action="/admin/" method="post">
+          <input style="width: 100%" class="form-control mr-sm-4 d-inline" type="search" name="search"
+            placeholder="Search by name, category" aria-label="Search">
+          <button class="btn btn-outline-success  my-sm-3 d-inline" type="submit">Search</button>
+        </form>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div class="table-responsive">
+          <table style="width: 600px;" class="table" id="productsTable">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">
+                  <div class="sort-buttons">
+                    <button class="sort-up" data-column="Title">
+                      <i class="fas fa-sort-up"></i>
+                    </button>
+                    <button class="sort-down" data-column="Title">
+                      <i class="fas fa-sort-down"></i>
+                    </button>
+                  </div>
+                  Title
+                </th>
+                <th scope="col">
+                  <div class="sort-buttons">
+                    <button class="sort-up" data-column="Category">
+                      <i class="fas fa-sort-up"></i>
+                    </button>
+                    <button class="sort-down" data-column="Category">
+                      <i class="fas fa-sort-down"></i>
+                    </button>
+                  </div>
+                  Category
+                </th>
+                <th scope="col">
+                  <div class="sort-buttons">
+                    <button class="sort-up" data-column="Price">
+                      <i class="fas fa-sort-up"></i>
+                    </button>
+                    <button class="sort-down" data-column="Price">
+                      <i class="fas fa-sort-down"></i>
+                    </button>
+                  </div>
+                  Price
+                </th>
+                <th>Stock</th>
+                <th scope="col">Description</th>
+                <th>Image</th>
+                <th></th>
+                <th></th>
+                <th>Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table body content -->
+              {{#each products}}
+              <tr>
+                <td>#</td>
+                <td>{{this.Name}}</td>
+                <td>{{this.Category}}</td>
+                <td>{{this.Price}}</td>
+                <td>{{this.Stock}}</td>
+                <td data-toggle="tooltip" data-placement="top" title="{{this.Description}}">
+                  <span class="description-ellipsis">{{this.Description}}</span>
+                </td>
+                {{#each this.photos}}
+                <td><img style="max-width: 50px; max-height: 50px;" src="{{this.fileName}}" alt=""></td>
+                {{/each}}
+                <td>
+                  <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary">Edit</a>
+                  {{#if this.isHide}}
+                  <a href="/admin/unhide-product/{{this._id}}" class="btn btn-primary">Unlist</a>
+                  {{else}}
+                 {{!-- <a href="/admin/hide-product/{{this._id}}" class="btn btn-danger"
+                    onclick="return confirm('Are you sure you want to hide {{this.Name}} from users?')">List</a>  --}}
+                    
+                       <a href="/admin/hide-product/{{this._id}}" class="btn btn-danger"
+                    >List</a>
+
+                      
+
+
+
+
+                  {{/if}}
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: center;">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            
+            <li class="page-item"><a class="page-link" href="/admin?p=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="/admin?p=2">2</a></li>
+            <li class="page-item"><a class="page-link" href="/admin?p=3">3</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+
+
+  
+
+
+  <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+  <script>
+    // JavaScript code for sorting functionality
+    // Get the table element
+    const table = document.getElementById('productsTable');
+
+    // Get all rows in the table body
+    const rows = table.querySelectorAll('tbody tr');
+
+    // Set the row number for each row
+    rows.forEach((row, index) => {
+      const cell = row.querySelector('td:first-child');
+      cell.textContent = index + 1; // Set the row number
+    });
+
+    // Sorting functionality
+    const sortButtons = document.querySelectorAll('.sort-buttons button');
+
+    sortButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const column = button.dataset.column;
+
+        // Get the index of the column
+        const columnIndex = Array.from(button.parentNode.parentNode.parentNode.children).indexOf(button.parentNode.parentNode);
+
+        // Get all rows in the table body
+        const rowsArray = Array.from(rows);
+
+        // Toggle sort order
+        let sortOrder = 1;
+        if (button.classList.contains('sort-up')) {
+          button.classList.remove('sort-up');
+          button.classList.add('sort-down');
+          sortOrder = -1;
+        } else {
+          button.classList.remove('sort-down');
+          button.classList.add('sort-up');
+        }
+
+        // Sort the rows based on the selected column
+        rowsArray.sort((a, b) => {
+          const aValue = a.children[columnIndex].textContent.toLowerCase();
+          const bValue = b.children[columnIndex].textContent.toLowerCase();
+
+          if (aValue < bValue) {
+            return -1 * sortOrder;
+          } else if (aValue > bValue) {
+            return 1 * sortOrder;
+          } else {
+            return 0;
+          }
+        });
+
+        // Re-append the sorted rows to the table body
+        rowsArray.forEach((row) => {
+          table.tBodies[0].appendChild(row);
+        });
+      });
+    });
+  
+  </script>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

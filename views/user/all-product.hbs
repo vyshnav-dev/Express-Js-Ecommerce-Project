@@ -1,0 +1,275 @@
+  <style>
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s;
+    transition: transform 0.5s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-15px);
+    /* Increase the size of the card on hover */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  }
+
+  .btn-warning {
+    color: #212529;
+    background-color: #ffc107;
+    height: 30px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 193, 7, 0.75);
+  }
+
+  .btn-info{
+     height: 40px;
+    border-radius: 40px;
+  }
+
+  body {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  body::-webkit-scrollbar {
+    width: 0.1em;
+  }
+
+  body::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  /* Added styling for the sidebar */
+  .sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+    width: 180px;
+    height: 100vh;
+    position: static;
+    left: 1rem;
+    top: 10rem;
+  }
+
+  .sidebar label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  /* Adjusted the product list layout */
+  .product-list {
+    margin-left: 321px;
+    /* The same width as the sidebar */
+    padding: 20px;
+  }
+
+  .product-list h1 {
+    color: blue;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .product-list .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-right: -15px;
+    /* Counteract the default padding */
+  }
+
+  .product-list .col-md-4 {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+</style>
+
+<script>
+function filterProducts(category) {
+  const productCards = document.getElementsByClassName('product-card');
+
+  for (let i = 0; i < productCards.length; i++) {
+    const card = productCards[i];
+    const cardCategory = card.getAttribute('data-category');
+
+    if (category === 'all' || cardCategory === category) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  }
+}
+
+
+</script>
+
+<section style="background-color: white">
+  <div class="container-fluid mt-5" style="background-color: white">
+    <div class="row">
+      <!-- Sidebar -->
+      <aside style="background-color: white;" class="sidebar">
+        <h4>Categories</h4>
+        <input type="radio" id="all" name="category" value="all" onclick="filterProducts('all')">
+        <label for="all">All</label>
+        <input type="radio" id="sunglass" name="category" value="sunglass" onclick="filterProducts('sunglass')">
+        <label for="sunclass">Sunglass</label>
+        <input type="radio" id="computer-glass" name="category" value="computer-glass" onclick="filterProducts('computer glass')">
+        <label for="computer-glass">Computer Glass</label>
+        <input type="radio" id="eye-glass" name="category" value="eye-glass" onclick="filterProducts('eyeglass')">
+        <label for="eye-glass">Eye Glass</label>
+      </aside>
+
+      <!-- Product List -->
+      <div class="col-md-8 offset-md-4 p-3 product-list">
+        <h1 style="justify-content: center;">𝓟𝓡𝓞𝓓𝓤𝓒𝓣𝓢</h1>
+        {{!-- search --}}
+          <div class="d-flex justify-content-end mt-2 mr-8" style="padding-left: 50px;">
+             <form class="form-inline" action="/all-product" method="post">
+                <input style="width: 15rem" class="form-control mr-sm-2 d-inline" type="search" name="search" placeholder="Search...." aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 d-inline" type="submit">Search</button>
+              </form>
+          </div>
+        <div class="row">
+          {{#each products}}
+          {{#if this.isHide}}
+          {{else}}
+          {{#if this.Stock}}
+          <div class="col-md-4 p-3 product-card" data-category="{{this.Category}}">
+            <div class="card" style="width: 20rem; border: white; background-color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 1);">
+              <a href="/productdetails/{{this._id}}">
+                <img style="height: 18rem; width: 18rem" src="{{this.photos.[0].fileName}}" class="card-img-top" alt="...">
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">{{this.Name}}</h5>
+                <h4><p class="card-text"><span>₹</span>{{this.Price}}</p></h4>
+                {{!-- <h6 class="card-text">{{this.Category}}</h6> --}}
+                <br>
+                <button onclick="addToCart('{{this._id}}')" class="btn-warning">Add to Cart<i class="fa fa-shopping-cart"></i></button>
+                  <button onclick="addToWishlist('{{this._id}}')" ><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+          </div>
+          {{/if}}
+          {{/if}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display: flex;  justify-content: center;">
+  <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="/all-product?p=1">1</a></li>
+    <li class="page-item"><a class="page-link" href="/all-product?p=2">2</a></li>
+    <li class="page-item"><a class="page-link" href="/all-product?p=3">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
+</div>
+</section>
+
+  <!-- Footer -->
+<footer class="text-center text-lg-start text-white" style="background-color: #1c2331; height:450px">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-between p-4" style="background-color: #000000">
+    <!-- Left -->
+    <div class="me-5">
+      <span><strong>Shop Specs for Online at the Best in India</strong></span>
+    </div>
+    <!-- Left -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links -->
+  <section class="mt-5">
+    <div class="container text-center text-md-start">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-6 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold">speXcart</h6>
+          <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+          <p>
+           Finding the perfect pair of eyeglasses can be a daunting task, especially when faced with numerous acronyms and technical specifications. However, at speXcart, we believe that regardless of your budget, vision needs, or personal style, you'll always discover the ideal eyeglasses for yourself 
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold">Products</h6>
+          <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+          <p>
+            <a href="#!" class="text-white">Sunglasses</a>
+          </p>
+          <p>
+            <a href="#!" class="text-white">Eyeglasses</a>
+          </p>
+          <p>
+            <a href="#!" class="text-white">Computerglasses</a>
+          </p>
+          <p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold">Useful links</h6>
+          <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+          <p>
+            <a href="#!" class="text-white">Help And Support</a>
+          </p>
+          <p>
+            <a href="#!" class="text-white">FAQs</a>
+          </p>
+          <p>
+            <a href="#!" class="text-white">Buying Guide</a>
+          </p>
+          <p>
+            <a href="#!" class="text-white">Return Policy</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-6 col-lg-3 col-xl-3 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold">Contact</h6>
+          <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+         
+          <p><i class="fas fa-envelope mr-3"></i> speXcart@.com</p>
+          <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
+          <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links -->
+
+  <!-- Footer Text -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+  Copyright @speXcart2023
+  </div>
+  <!-- Footer Text -->
+</footer>
+<!-- Footer -->
+  
+  
+  
+  
+  
+
+      
+
+
+     
+
+
+      
+
+
+
+
+ 

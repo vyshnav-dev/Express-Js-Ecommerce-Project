@@ -1,0 +1,106 @@
+<style>
+  .confirmation-dialog {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .confirmation-dialog h3 {
+    margin-bottom: 10px;
+  }
+
+  .confirmation-dialog .confirmation-buttons {
+    margin-top: 20px;
+  }
+
+  .confirmation-dialog .confirmation-buttons button {
+    margin: 0 10px;
+  }
+</style>
+
+<section>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="text-center">Add Category</h2>
+                <form id="categoryForm" action="/admin/add-category" method="POST" enctype="multipart/form-data">
+                    {{#if caError}}
+                    <p style="color: red;">{{caError}}</p>
+                    {{/if}}
+                    <label for="categoryName">Category Name</label> 
+                    <input id="categoryName" type="text" name="Category" class="form-control" required>
+                    <div id="categoryNameError" style="color: red;"></div>
+
+                    <label for="categoryImage">Image</label>
+                    <input type="file" name="Image" class="form-control-file" id="categoryImage" accept="Image/*" multiple required>
+
+                    <button type="button" id="submitBtn" class="btn btn-success mt-4">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
+<script>
+
+  document.getElementById("submitBtn").addEventListener("click", function() {
+    if (validateForm()) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Once submitted, you will not be able to change the data.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Submit",
+            cancelButtonText: "Cancel",
+            dangerMode: true,
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                document.getElementById("categoryForm").submit();
+            }
+        });
+    }
+});
+
+   
+
+    function validateForm() {
+        let isValid = true;
+
+        const categoryNameInput = document.getElementById('categoryName');
+        const categoryNameError = document.getElementById('categoryNameError');
+
+        // Reset error messages
+        categoryNameError.textContent = '';
+
+        // Validate Category Name field
+        if (categoryNameInput.value.trim() === '') {
+            categoryNameError.textContent = 'Category Name is required';
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+<script>
+  $(function () {
+    $('#productsTable').DataTable({
+      "dom": '<"top"i>rt<"bottom"flp><"clear">',
+    });
+  })
+</script>

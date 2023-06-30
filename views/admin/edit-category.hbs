@@ -1,0 +1,136 @@
+<style>
+  .confirmation-dialog {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .confirmation-dialog h3 {
+    margin-bottom: 10px;
+  }
+
+  .confirmation-dialog .confirmation-buttons {
+    margin-top: 20px;
+  }
+
+  .confirmation-dialog .confirmation-buttons button {
+    margin: 0 10px;
+  }
+</style>
+
+<section>
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2 class="text-center">Edit Category</h2>
+        {{#if caError}}
+        <p style="color: red;">{{caError}}</p>
+        {{/if}}
+        <form id="categoryForm" action="/admin/edit-category/{{category._id}}" method="POST" enctype="multipart/form-data">
+          <label for="category">Category Name</label>
+          <input id="category" type="text" name="Category" class="form-control" value="{{category.Category}}">
+          <p id="categoryError" style="color: red;"></p>
+
+          <label for="image">Image</label>
+         
+          <input type="file" name="Image" class="form-control"  id="categoryImage" onchange="viewImage(event)">
+           <img id="imgView" src="{{this.category.photos.[0].fileName}}" alt="" style="width: 100px; height:auto" >
+          <canvas id="imgCanvas" style="display: none;"></canvas>
+          <img src="" alt="Cropped Image" style="display: none;" id="croppedImgView">
+          <p id="imageError" style="color: red;"></p>
+
+          <button type="button" id="submitBtn" class="btn btn-success mt-4">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<script src="https://unpkg.com/cropperjs@1.5.11/dist/cropper.js"></script>
+{{!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
+<script>
+ function loadImage(event) {
+  var input = event.target;
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.getElementById('imgView');
+      img.src = e.target.result;
+      img.onload = function() {
+        var canvas = document.getElementById('imgCanvas');
+        var cropper = new Cropper(img, {
+          aspectRatio: 1, // Adjust the aspect ratio according to your needs
+          viewMode: 1, // Set the crop box to cover the entire canvas
+          ready: function() {
+            cropper.crop();
+          },
+          cropend: function() {
+            canvas.width = cropper.getCroppedCanvas().width;
+            canvas.height = cropper.getCroppedCanvas().height;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(cropper.getCroppedCanvas(), 0, 0, canvas.width, canvas.height);
+            var croppedImg = document.getElementById('croppedImgView');
+            croppedImg.src = canvas.toDataURL();
+            croppedImg.style.display = 'block';
+          }
+        });
+      };
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+document.getElementById('submitBtn').addEventListener('click', function() {
+  var categoryInput = document.getElementById('category');
+  var imageInput = document.getElementById('categoryImage');
+  var croppedImg = document.getElementById('croppedImgView');
+  var categoryError = document.getElementById('categoryError');
+  var imageError = document.getElementById('imageError');
+
+  // Reset error messages
+  categoryError.textContent = '';
+  imageError.textContent = '';
+
+  // Validate category input
+  if (categoryInput.value.trim() === '') {
+    categoryError.textContent = 'Please enter a category name.';
+    return;
+  }
+
+  // Validate image input
+  {{!-- if (imageInput.files.length === 0 && croppedImg.style.display === 'none') {
+    imageError.textContent = 'Please select an image.';
+    return;
+  } --}}
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Once submitted, you will not be able to change the data.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel',
+    dangerMode: true,
+  }).then(function(result) {
+    if (result.value) {
+      document.getElementById('categoryForm').submit();
+    }
+  });
+});
+
+
+  function ViewImage(event) {
+    document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0]);
+  }
+
+
+</script>
+
+
+  

@@ -1,0 +1,41 @@
+
+<style>
+   body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+     background-image: url(https://img.freepik.com/premium-photo/front-view-plastic-eyeglasses-table_23-2148290358.jpg);
+     background-repeat: no-repeat; 
+         background-size: cover;
+    }
+</style>
+
+<section class="container mt-5" style="text-align: center; ">
+  <div class="wrapper fadeInDown" style="margin-top: 58px; max-width: 400px; margin: 0 auto;">
+    <div id="formContent">
+      <!-- Remind Password -->
+      <div id="formHeader" style="margin-bottom: 20px;">
+        <h2 style="font-size: 24px; color: brown;">ADMIN MODE</h2>
+      </div>
+
+      <!-- Login Form -->
+      <form action="/admin/adminLogin" method="POST">
+        {{#if loginErr}}
+        <p class="error fadeIn second" style="color: orangered;">Invalid Username or Password</p>
+        {{/if}}
+        <input type="text" id="login" class="fadeIn second" name="Email" placeholder="Admin email" style="width: 100%; padding: 10px; margin-bottom: 20px;border-radius: 20px;">
+        <input type="password" id="password" class="fadeIn third" name="Password" placeholder="Password" autocomplete="off" style="width: 100%; padding: 10px; margin-bottom: 20px;border-radius: 20px;">
+        <input type="submit" class="fadeIn fourth" value="Log In" style="width: 100px; padding: 10px; background-color: #ff5e3a; color: #fff; border: none; cursor: pointer;">
+      </form>
+
+      <div style="margin-top: 50px;" id="">
+        <a href="/login">
+          {{!-- <button class="glow-on-hover" type="button" style="width: 100%; padding: 10px; background-color: #333; color: #fff; border: none; cursor: pointer;">I am a user</button> --}}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+

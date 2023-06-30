@@ -1,0 +1,26 @@
+
+
+ <div style="display: flex; justify-content: center;" class="row">
+          {{#each products}}
+         
+          
+          <div class="col-md-4 p-3 product-card" data-category="{{this.Category}}">
+            <div class="card" style="width: 20rem; border: white; background-color: white; box-shadow: 0 0 10px rgba(255, 255, 255, 1);">
+              <a href="/productdetails/{{this._id}}">
+                <img style="height: 18rem; width: 18rem" src="{{this.product.photos.[0].fileName}}" class="card-img-top" alt="...">
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">{{this.product.Name}}</h5>
+                <h4><p class="card-text"><span>₹</span>{{this.product.Price}}</p></h4>
+                {{!-- <h6 class="card-text">{{this.Category}}</h6> --}}
+                <br>
+               
+              </div>
+              <div class="col-md-4">
+          <span class="badge badge-primary">Quantity: {{this.quantity}}</span>
+              </div>
+            </div>
+          </div>
+         
+          {{/each}}
+        </div>
