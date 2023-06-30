@@ -217,6 +217,9 @@ module.exports={
             _id: { $month: { $toDate: "$date" } },
             totalAmount: { $sum: "$totalAmount" }
           }
+        },
+        {
+          $sort:{"_id":1}
         }
       ]).toArray((err, result) => {
         if (err) {

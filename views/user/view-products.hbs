@@ -1,101 +1,4 @@
-   {{!-- <style>
-     .btn-circle.btn-md {
-            width: 50px;
-            height: 50px;
-            padding: 7px 10px;
-            border-radius: 25px;
-            font-size: 10px;
-            text-align: center;
-        }
-   </style>
-   
-   <header>
-    <nav style="background-color: black;" class="navbar navbar-expand-lg">
-      <a  style="color: aliceblue; " class="navbar-brand" href="#"><h2>spe<b style="color: darkred;">X</b>cart</h2></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          
-          <li class="nav-item active">
-            <a style="color: aliceblue;" class="nav-link" href="/"><h5></h5> <span class="sr-only">(current)</span></a>
-          </li>
-          
-          
-          <li class="nav-item">
-            <a style="color: aliceblue;" class="nav-link" href="/login"><h5></h5></a>
-          </li>
-         {{#if user}}
-          <li class="nav-item">
-            <a style="color: aliceblue;" class="nav-link" href="#"><h5></h5></a>
-          </li>
-          {{/if}}
-        </ul>
-        <div>
-          <ul class="navbar-nav d-flex flex-row me-1">
-            <li class="nav-item dropdown">
-             
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                     
-                        <a class="dropdown-item" href="#">My Orders</a>
-                          <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Wishlist</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/adminLogout">Wallet</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/adminLogout">Contact Us</a>
-                        
-                    </div>
-                </li>
-                 <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link text-white" href="/all-product"><i class="fas fa-shopping-cart">Shop</i></a>
-                </li>
-                <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link text-white" href="#"><i class="fas fa-shopping-cart">cart</i></a>
-                </li>
-                <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link text-white" href="#"><i class="fab fa-twitter"></i></a>
-                </li>
-            </ul>
-        </div>
-        
-        <div class="dropdown">
-  <button class="btn btn-primary btn-circle btn-md" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    {{#if user }}
-        {{user.Name}}
-    {{else}}
-        
-    {{/if}}
-
-    
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    {{#if user }}
-        <a class="dropdown-item" href="/logout">Logout</a>
-    {{else}}
-       <a class="dropdown-item" href="/login">Login</a>
-      <a class="dropdown-item" href="/admin">Admin</a>
-    {{/if}}
-    
-    
-  </div>
-</div>
-      </div>
-    </nav> --}}
-    {{!-- <div style="width: 100%; height: 30%; background-color: rgba(6, 136, 154, 0.95); text-align:center">
-      <a style="color: azure;">Grate Style At Grate Prices  & Buy One Get One  FREE</a>
-      
-    </div>
-
-    
-  </header> --}}
   
   
   <style>
@@ -119,6 +22,7 @@
 body {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
+   overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {
