@@ -130,21 +130,7 @@ async function home(req, res, next) {
   }
 
   async function otpPost (req, res){
-    // userHelpers.doMailCheck(req.body).then((status)=>{        //------------------
-  
-    //   if(status.status){
-  
-    //     userHelpers.doMailVarifySuccess(req.body)
-    //     res.redirect("/login")
-  
-    //   }else{                                                      //5c^>
-    //     console.log("wrong otp"+req.session.UserOtp)
-    //     let otp=req.session.UserOtp
-    //     userHelpers.deleteBlockedUser(otp)
-  
-    //     res.redirect('/signup')
-    //   }
-    // })                                                        //------------------
+                                                       
     
     if (otp == req.body.otp) {
       console.log( req.session.userDetails)
@@ -170,13 +156,7 @@ async function home(req, res, next) {
       res.redirect("/signup");
     }
   
-    // if(req.session.UserOtp==req.body.otp){           //=====================================
-    //   res.redirect('/login')
-    // }else{
-    //   alert('wrong otp')
-    //   res.redirect('/signup')
-    //   req.session.UserOtp=null;
-    // }
+    
   }
 
   function resendOtpPost(req,res){
@@ -487,8 +467,14 @@ function addCartGet(req,res){
     async function cancelOrder (req, res){
       let id = req.query.id;
       let status = req.query.st
-      await userHealpers.cancelOrder(id,status);
+      await userHealpers.cancelOrder(id,status); 
+      let order=await userHealpers.getOrder(id)
+      let amount=order.totalAmount
+      if(order.paymentMethod=='ONLINE'){
+        userHealpers.addAmountWallet(amount,userId)
+      }
       res.redirect("/order-summery");
+
     }
 
    
